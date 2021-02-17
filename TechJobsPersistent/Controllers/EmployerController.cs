@@ -1,11 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
 using TechJobsPersistent.Models;
 using TechJobsPersistent.ViewModels;
 using TechJobsPersistent.Data;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 
 // For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
@@ -20,8 +23,9 @@ namespace TechJobsPersistent.Controllers
         {
             context = jobContext;
         }
+
         // GET: /<controller>/
-        [HttpGet]
+
         public IActionResult Index()
         {
             List<Employer> employers = context.Employers.ToList();
@@ -30,9 +34,10 @@ namespace TechJobsPersistent.Controllers
         }
 
         [HttpGet]
-        public IActionResult Add()
+        public IActionResult AddEmployer()
         {
             AddEmployerViewModel addEmployerViewModel = new AddEmployerViewModel();
+
             return View("Add", addEmployerViewModel);
         }
 
@@ -46,6 +51,7 @@ namespace TechJobsPersistent.Controllers
                     Name = addEmployerViewModel.Name,
                     Location = addEmployerViewModel.Location
                 };
+
                 context.Employers.Add(newEmployer);
                 context.SaveChanges();
 
@@ -56,6 +62,8 @@ namespace TechJobsPersistent.Controllers
         public IActionResult About(int id)
         {
             Employer newEmployer = context.Employers.Find(id);
+
+
             return View(newEmployer);
         }
     }
